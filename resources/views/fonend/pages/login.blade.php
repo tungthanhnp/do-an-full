@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{!! asset('css/core-style.css') !!}">
     <link rel="stylesheet" href="{!! asset('css/style.css') !!}">
     <script src="{!! asset('js/jquery-3.3.1.min.js') !!}"></script>
+    <script src="{!! asset('js/my.js') !!}"></script>
 </head>
 
 <body>
@@ -113,6 +114,7 @@
                             </div>
                             <div class="form-group">
                                 <input class="form-control" placeholder="Password" name="password" id="password" type="password" value="">
+                                <img id="showpass" class="showpass" style="float:right; margin-top:-29px;margin-right: 12px;" src="{!! asset('css/image/showpass.png') !!}" alt="">
                                 @if($errors->has('password'))
                                     <div class="text-danger">{!! $errors->first('password') !!}
                                     </div>

@@ -31,7 +31,7 @@
 
                                     <div class="form-group">
                                         <label for="disabledSelect">Password</label>
-                                        <input class="form-control" type="password" id="password" name="password"
+                                        <input class="form-control" type="password" id="password" name="password" value="{!! old('password') !!}"
                                                placeholder="Nhập tên password muốn thêm">
                                         @if($errors ->has('password'))
                                             <span class="text-danger">{!! $errors->first('password') !!}</span>
@@ -40,7 +40,7 @@
 
                                     <div class="form-group">
                                         <label for="disabledSelect">Nhâp lại Password</label>
-                                        <input class="form-control" type="password" id="passwordold" name="passwordold"
+                                        <input class="form-control" type="password" id="passwordold" name="passwordold" value="{!! old('passwordold') !!}"
                                                placeholder="Nhập lại password ">
                                         @if($errors ->has('passwordold'))
                                             <span class="text-danger">{!! $errors->first('passwordold') !!}</span>

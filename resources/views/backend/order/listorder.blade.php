@@ -99,12 +99,33 @@
 @endsection
 @section('script')
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         function deleteorder(id)
         {
             check=confirm('bạn có chắc chắn muốn xóa không?');
             if (check)
             {
-                window.location.href="{!! route('getXoaOrder') !!}"+'/'+id;
+                $.ajax({
+                    url: "{!! route('postXoaOrder') !!}",
+                    type: "post",
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+
+                        if (data=='true'){
+                            alert('đơn hàng đã xác nhận hoặc đã giao hàng lên không thể xóa');
+                        }else
+                            alert('xóa thành công');
+                        window.location.reload();
+
+                    }
+                });
             }
         }
 

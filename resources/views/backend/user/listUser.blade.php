@@ -10,6 +10,7 @@
                                 {!! Session::get('thongbao') !!}
                             </div>
                         @endif
+                        <div class="tung"></div>
                         @if(Session::has('thongbaothanhcong'))
                             <div class="alert alert-success text-center">
                                 {!! Session::get('thongbaothanhcong') !!}
@@ -80,23 +81,48 @@
 @endsection
 @section('script')
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-            function delete_user(id) {
+        function delete_user(id)
+        {
                check=confirm('bạn có chắc chắn xóa không?')
                 if (check){
-                   window.location.href="{!! route('getXoaUser') !!}"+'/'+id;
+                    $.ajax({
+                        url: "{!! route('postXoaUser') !!}",
+                        type: "post",
+                        data: {
+                            id: id,
+                        },
+                        success: function (data) {
+                            if (data =='1'){
+                                alert('bạn không thể xóa user này vì user này đã từng mua hàng , nếu bạn xóa thì đồng nghĩa sẽ mất dữ liệu');
+                            }else if(data=='2'){
+                                alert('bạn đã xóa thành công');
+                                window.location.reload();
+                            }else if(data=='3'){
+                                alert('bạn không thể xóa chính mình');
+                            }else if(data=='4'){
+                                alert('bạn không thể xóa user này vì đây ũng là user admin');
+                            }else if(data=='5'){
+                                alert('bạn đã xóa thành công');
+                                window.location.reload();
+                            }else if(data=='6'){
+                                alert('bạn chỉ là admin bạn không thể xóa supper admin');
+                            }else if(data=='7'){
+                                alert('bạn là user admin và bạn không thể xóa được chính mình');
+                            }
+
+                        }
+                    });
                 }
-            };
+        };
 
 
             function edit_user(id) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-
                 $.ajax({
                     url : "{!! route('postSuaUserajax') !!}",
                     type : "post",

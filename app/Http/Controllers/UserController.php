@@ -26,10 +26,17 @@ class UserController extends Controller
                 'email'       => 'required|min:9|unique:users,email|email',
                 'password'    => 'required|min:6|max:200',
                 'passwordold' => 'required|same:password',
-                'phone'       => 'numeric',
+                'phone'       => 'numeric|',
                 'avatar'      => 'required|mimes:jpg,jpeg,png,|max:5000kb',
 
             ];
+        if (strlen($request->phone)==10){
+            $relus['phone']="regex:/(09)[0-9]{8}/";
+        }elseif(strlen($request->phone)==11){
+            $relus['phone']="regex:/(01)[0-9]{9}/";
+        }else{
+            $relus['phone']="regex:/(01)[0-9]{9}/";
+        }
         $messages =
             [
                 'required' => ':attribute không được để trống',
@@ -40,7 +47,7 @@ class UserController extends Controller
                 'email'    => 'bạn phải nhập đúng định dạng email',
                 'unique'   => 'email đã tồn tại',
                 'mimes'    =>'ảnh phải có đuôi img , png hoăc jpg',
-                'size'     =>'độ lơn tối đa của ảnh là 5mb'
+                'regex'    =>'nhập sai định dạng số điện thoại'
 
 
             ];
@@ -50,6 +57,7 @@ class UserController extends Controller
                 'phone' => 'số điện thoại'
             ];
         $validate = Validator::make($data, $relus, $messages, $customAttribute);
+
         if ($validate->fails())
         {
             return back()->withErrors($validate)->withInput();
@@ -61,7 +69,12 @@ class UserController extends Controller
         $user->password       = bcrypt($request->password);
         $user->address        = $request->address;
         $user->phone          = $request->phone;
-        $user->lever          = $request->quyen;
+        if (Auth::user()->lever==2)
+        {
+            $user->lever          = $request->quyen;
+        }else{
+            $user->lever       = 0;
+        }
         if ($request->hasFile('avatar'))
         {
             $file=$request->avatar;
@@ -85,48 +98,53 @@ class UserController extends Controller
 
 
 // xoa user
-    public function getxoa($id)
+    public function getxoa(Request $request)
     {
+        $id=$request->id;
         $users = User::find($id);
-        $user  =User::all();
         if(Order::where('user_id',$id)->first()  )
         {
             $order=Order::where('user_id',$id)->first();
             if ($users->id == $order->user_id)
             {
-                return back()->with('thongbao','bạn không thể xóa user này vì user này đã từng mua hàng , nếu bạn xóa thì đồng nghĩa sẽ mất dữ liệu');
+                echo '1';
+      /*          return back()->with('thongbao','bạn không thể xóa user này vì user này đã từng mua hàng , nếu bạn xóa thì đồng nghĩa sẽ mất dữ liệu');*/
             }
         }else
         {
             if (Auth::user()->lever ==2 && $users->lever != 2)
             {
+              unlink('css/image-user'.$users->image);
                 $users->delete();
-                return redirect()->route('danhSachUser')->with('thongbao', 'bạn đã xóa thành công');
+                echo '2';/*
+                return redirect()->route('danhSachUser')->with('thongbao', 'bạn đã xóa thành công');*/
 
             }elseif(Auth::user()->lever ==2 && $users->lever ==2)
             {
-                return redirect()->route('danhSachUser')->with('thongbao', 'bạn  không thể xóa được chính mình');
+                echo '3';
+              /*  return redirect()->route('danhSachUser')->with('thongbao', 'bạn  không thể xóa được chính mình');*/
 
             }elseif($users->lever ==1 && Auth::user()->lever ==1 && $users->id != Auth::user()->id)
             {
-                return back()->with('thongbao', 'bạn không thể xóa user này vì đây ũng là user admin');
+                echo '4';
+                /*return back()->with('thongbao', 'bạn không thể xóa user này vì đây ũng là user admin');*/
 
             }elseif ($users->lever ==1 && Auth::user()->lever==1 && $users->id == Auth::user()->id)
             {
-                return back()->with('thongbao', 'bạn là user admin và bạn không thể xóa chính mình');
+                echo '7';
+                /*return back()->with('thongbao', 'bạn là user admin và bạn không thể xóa chính mình');*/
 
             }elseif ($users->lever ==0)
             {
+                unlink("css/image-user/".$users->avatar);
                 $users->delete();
-                return redirect()->route('danhSachUser')->with('thongbao', 'bạn đã xóa thành công');
-            }
-            foreach ($user as $us)
-            {
-                if ($us->lever ==2 && Auth::user()->lever ==1)
-                {
-                    return redirect()->route('danhSachUser')->with('thongbao', 'bạn chỉ là admin bạn không thể xóa supper admin');
-                }
-            }
+
+
+
+                echo '5';
+                /*return redirect()->route('danhSachUser')->with('thongbao', 'bạn đã xóa thành công');*/
+            }else
+                echo '6';
 
         }
 

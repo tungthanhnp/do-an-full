@@ -237,12 +237,14 @@ class ProductController extends Controller
         return back()->with('baocao','xóa thành công');
     }
     // xóa product
-    public function getxoa($id)
+    public function getxoa(Request $request)
     {
+        $id=$request->id;
         $product=Product::find($id);
         if (Order::where('product_id',$id)->first())
         {
-            return back()->with('thongbao','bạn không thể xóa sản phẩm này vì sản phẩm này đã có người mua hàng, nếu xóa đi đồng nghĩa với việc bạn sẽ bị mất dữ liêu');
+            echo 'true';
+            /*return back()->with('thongbao','bạn không thể xóa sản phẩm này vì sản phẩm này đã có người mua hàng, nếu xóa đi đồng nghĩa với việc bạn sẽ bị mất dữ liêu');*/
         }else
         {
             $product->delete();

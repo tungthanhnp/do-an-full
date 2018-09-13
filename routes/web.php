@@ -22,7 +22,7 @@ Route::group(['prefix'=>'admin','middleware'=>'adminlogin'],function (){
         Route::get('them','UserController@getThem')->name('getThemUser');//
         Route::post('themuser','UserController@postThem')->name('postThemUser');//
 
-        Route::get('delete/{id?}','UserController@getxoa')->name('getXoaUser');
+        Route::post('delete/{id?}','UserController@getxoa')->name('postXoaUser');
     });
     Route::group(['prefix'=>'category'],function (){
         Route::get('danhsach','categoryControler@getdanhSach')->name('danhSachcate');//
@@ -33,7 +33,7 @@ Route::group(['prefix'=>'admin','middleware'=>'adminlogin'],function (){
         Route::get('them','categoryControler@getThem')->name('getThemcate');
         Route::post('them','categoryControler@postThem')->name('postThemcate');
 
-        Route::get('xoa/{id?}','categoryControler@getxoa')->name('getXoaCate');//
+        Route::post('xoa/{id?}','categoryControler@getxoa')->name('posttXoaCate');//
     });
 
     Route::group(['prefix'=>'product'],function (){
@@ -46,7 +46,7 @@ Route::group(['prefix'=>'admin','middleware'=>'adminlogin'],function (){
         Route::post('them','ProductController@postThem')->name('postThemProduct');//
 
         Route::get('xoa/{id}','ProductController@getxoaImg_detail')->name('getXoaProduct_img');//
-        Route::get('xoa-product/{id?}','ProductController@getxoa')->name('getXoaProduct');//
+        Route::post('xoa-product/{id?}','ProductController@getxoa')->name('postXoaProduct');//
     });
     Route::group(['prefix'=>'color'],function (){
         Route::get('danhsach','ColorController@getdanhSach')->name('danhSachColor');//
@@ -57,7 +57,7 @@ Route::group(['prefix'=>'admin','middleware'=>'adminlogin'],function (){
         Route::get('them','ColorController@getThem')->name('getThemcolor');
         Route::post('them','ColorController@postThem')->name('postThemcolor');
 
-        Route::get('xoa/{id?}','ColorController@getxoa')->name('getXoacolor');//
+        Route::post('xoa/{id?}','ColorController@getxoa')->name('postXoacolor');//
     });
     Route::group(['prefix'=>'size'],function (){
         Route::get('danhsach','SizeCOntroller@getdanhSach')->name('danhSachsize');//
@@ -68,12 +68,12 @@ Route::group(['prefix'=>'admin','middleware'=>'adminlogin'],function (){
         Route::get('them','SizeCOntroller@getThem')->name('getThemsize');
         Route::post('them','SizeCOntroller@postThem')->name('postThemsize');
 
-        Route::get('xoa/{id?}','SizeCOntroller@getxoa')->name('getXoasize');//
+        Route::post('xoa/{id?}','SizeCOntroller@getxoa')->name('postXoasize');//
 
     });
     Route::group(['prefix'=>'order'],function (){
         Route::get('danhsach','orderControler@getdanhSach')->name('danhSachorder');//
-        Route::get('xoa/{id?}','orderControler@getxoa')->name('getXoaOrder');//
+        Route::post('xoa/{id?}','orderControler@getxoa')->name('postXoaOrder');//
         Route::get('xacnhandon/{id?}','orderControler@xacnhandon')->name('xacnhandon');//
         Route::get('xacnhandondagiao/{id?}','orderControler@xacnhandondagiao')->name('xacnhandondagiao');//
     });
@@ -123,12 +123,6 @@ Route::group(['prefix'=>'fonend'],function (){
     // xử lí ajax
     Route::post('checkemail','AjaxController@checkemail')->name('checkemail');
     Route::post('ajaxcate','AjaxController@ajaxcate')->name('ajaxcate');
-
-
-Route::get('tungthanh',function (){
-    $data=App\User::where('id','>',1)->orderBy('id')->get();
-    dd($data);
-});
 
 
 

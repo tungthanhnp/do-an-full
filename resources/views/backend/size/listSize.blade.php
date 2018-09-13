@@ -63,11 +63,27 @@
 @endsection
 @section('script')
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
         function deletecate(id){
             check=confirm('bạn có chắc chắc xóa không?');
             if (check){
-                window.location.href="{!! route('getXoasize') !!}"+'/'+id;
+                $.ajax({
+                    url: "{!! route('postXoasize') !!}",
+                    type: "post",
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+                            alert('xóa thành công');
+                        window.location.reload();
+
+                    }
+                });
             }
         };
 

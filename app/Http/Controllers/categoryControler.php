@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Validator;
+use App\Product;
 
 class categoryControler extends Controller
 {
@@ -53,11 +54,15 @@ class categoryControler extends Controller
     }
 
     //xoa cate
-    public function getxoa($id)
+    public function getxoa(Request $request)
     {
-        $cate=Category::find($id);
-        $cate->delete();
-        return redirect()->route('danhSachcate')->with('thongbao','bạn đã xóa thành công');
+        $id = $request->id;
+        $cate = Category::find($id);
+        $pro = Product::where('category_id', $id)->first();
+        if ($pro) {
+            echo 'true';
+        } else
+            $cate->delete();
     }
 
     //sủa cate

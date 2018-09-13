@@ -81,7 +81,7 @@ class FonendController extends Controller
         ]);*/
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password]))
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password] ,true))
         {
             if (Auth::user()->lever == 1 || Auth::user()->lever == 2) {
                 return redirect()->route('danhSachorder');

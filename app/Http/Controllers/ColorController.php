@@ -106,11 +106,12 @@ class ColorController extends Controller
     }
 
     //xoa color
-    public function getxoa($id)
+    public function getxoa(Request $request)
     {
+        $id=$request->id;
         $color=Color::find($id);
         $color->delete();
-        return redirect()->route('danhSachColor')->with('thongbao','bạn đã xóa thành công');
+        echo 'true';
     }
 
 }

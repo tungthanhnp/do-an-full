@@ -52,11 +52,12 @@ class SizeCOntroller extends Controller
     }
 
     //xoa cate
-    public function getxoa($id)
+    public function getxoa(Request $request)
     {
+        $id=$request->id;
         $size=Size::find($id);
         $size->delete();
-        return redirect()->route('danhSachsize')->with('thongbao','bạn đã xóa thành công');
+        echo 'okie';
     }
 
     //sủa cate

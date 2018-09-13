@@ -15,11 +15,16 @@ class orderControler extends Controller
        return view('backend.order.listorder',['data'=>$data]);
     }
 
-    public function getxoa($id)
+    public function getxoa(Request $request)
     {
+        $id=$request->id;
         $data=Order::find($id);
-        $data->delete();
-        return redirect()->route('danhSachorder')->with('thongbao','bạn đã xóa thành công');
+        if ($data->status==2 || $data->status==3 ){
+             echo 'true';
+        }else{
+            $data->delete();
+            echo 'false';
+        }
     }
     public function xacnhandon($id)
     {

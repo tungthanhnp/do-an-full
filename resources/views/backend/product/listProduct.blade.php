@@ -93,12 +93,32 @@
 @endsection
 @section('script')
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         function deleteproduct(id)
         {
             check=confirm('bạn có chắc chắn muốn xóa không?');
             if (check)
             {
-                window.location.href="{!! route('getXoaProduct') !!}"+'/'+id;
+                $.ajax({
+                    url: "{!! route('postXoaProduct') !!}",
+                    type: "post",
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+                        if (data=='true'){
+                            alert('bạn không thể xóa sản phẩm này vì sản phẩm này đã có người mua hàng, nếu xóa đi đồng nghĩa với việc bạn sẽ bị mất dữ liêu');
+                        } else
+                        alert('xóa thành công');
+                        window.location.reload();
+
+                    }
+                });
             }
         }
 
